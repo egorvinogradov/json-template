@@ -56,22 +56,22 @@ function parseInnerText(expression){
     }
 };
 
-function getElementHtml(data){
+function getElementHtml(tag, id, classes, attributes, text, children){
 
     var output = [];
     
-    if ( data.tagName ) {
+    if ( tag ) {
 
-        output.push('<' + data.tagName);
+        output.push('<' + tag);
 
-        if ( data.id ) {
-            output.push(' id="' + data.id + '"');
+        if ( id ) {
+            output.push(' id="' + id + '"');
         }
-        if ( data.classNames && data.classNames.length ) {
-            output.push(' class="' + data.classNames.join(' ') + '"');
+        if ( classes && classes.length ) {
+            output.push(' class="' + classes.join(' ') + '"');
         }
-        if ( data.attributes && data.attributes.length ) {
-            data.attributes.forEach(function(attribute){
+        if ( attributes && attributes.length ) {
+            attributes.forEach(function(attribute){
                 output.push(' ' + attribute.name);
                 if ( attribute.value ) {
                     output.push('="' + attribute.value + '"');
@@ -81,15 +81,15 @@ function getElementHtml(data){
         
         output.push('>');
 
-        if ( !isEmptyTag(data.tagName) ) {
-            if ( data.innerText ) {
-                output.push(escapeText(data.innerText));
+        if ( !isEmptyTag(tag) ) {
+            if ( text ) {
+                output.push(escapeText(text));
             }
-            output.push(( data.children || '' ) + '</' + data.tagName + '>');
+            output.push(( children || '' ) + '</' + tag + '>');
         }
     }
-    else if ( data.innerText ) {
-        output.push(escapeText(data.innerText));
+    else if ( text ) {
+        output.push(escapeText(text));
     }
 
     return output.join('');
@@ -110,40 +110,40 @@ function isEmptyTag(tagName){
 function handleExpression(expression, childNodeHtml){
     var firstNode = parseFirstNode(expression);
     var trimmed = firstNode
-	    	.replace(/\:[^\]]+$/, '')
-	    	.replace(/\[.*\]/, '');
+            .replace(/\:[^\]]+$/, '')
+            .replace(/\[.*\]/, '');
 
     if ( !childNodeHtml ) {
-	    var childNodeExpression = expression
-	    		.substr(firstNode.length)
-	    		.replace(/^\s*>\s*/, '');
+        var childNodeExpression = expression
+                .substr(firstNode.length)
+                .replace(/^\s*>\s*/, '');
 
-	    if ( !/^\s*$/.test(childNodeExpression) ) {
-	        childNodeHtml = handleExpression(childNodeExpression);
-	    }
+        if ( !/^\s*$/.test(childNodeExpression) ) {
+            childNodeHtml = handleExpression(childNodeExpression);
+        }
     }
 
-    return getElementHtml({
-        id: parseId(trimmed),
-        tagName: parseTagName(trimmed),
-        classNames: parseClassNames(trimmed),
-        attributes: parseAttributes(firstNode),
-        innerText: parseInnerText(firstNode),
-        children: childNodeHtml
-    });
+    return getElementHtml(
+		parseTagName(trimmed),
+		parseId(trimmed),
+		parseClassNames(trimmed),
+		parseAttributes(firstNode),
+		parseInnerText(firstNode),
+		childNodeHtml
+    );
 };
 
 function handleDOMTree(tree){
-	if ( tree instanceof Array ) {
-		return tree.map(handleDOMTree).join('');
-	}
-	else if ( typeof tree === 'string' ) {
-		return handleExpression(tree);
-	}
-	else if ( tree.el ) {
-		return handleExpression(
-			tree.el,
-			tree.children ? handleDOMTree(tree.children) : null
-		);
-	}
+    if ( tree instanceof Array ) {
+        return tree.map(handleDOMTree).join('');
+    }
+    else if ( typeof tree === 'string' ) {
+        return handleExpression(tree);
+    }
+    else if ( tree.el ) {
+        return handleExpression(
+            tree.el,
+            tree.children ? handleDOMTree(tree.children) : null
+        );
+    }
 };
