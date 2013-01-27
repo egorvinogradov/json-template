@@ -125,11 +125,14 @@ var DOM2 = [{
 			'div.b-logo > a.b-logo__link[href=/]:Example.com',
 			{
 				el: 'nav.b-nav',
-				children: [
-					'li.b-nav__item > a.b-nav__link[href=/about]:About',
-					'li.b-nav__item > a.b-nav__link[href=/products]:Products',
-					'li.b-nav__item.b-nav__item_selected > a.b-nav__link[href=/contact]:Contact'
-				]
+				children: {
+					el: 'ul.b-nav__list',
+					children: [
+						'li.b-nav__item > a.b-nav__link[href=/about]:About',
+						'li.b-nav__item > a.b-nav__link[href=/products]:Products',
+						'li.b-nav__item.b-nav__item_selected > a.b-nav__link[href=/contact]:Contact'
+					]
+				}
 			}
 		],
 	}, {
@@ -152,6 +155,9 @@ var DOM2 = [{
 	}
 ];
 
+
+
+
 var CSS = {
 	'.b-header': {
 		display: 'block',
@@ -168,11 +174,13 @@ var CSS = {
 /* lib */
 
 
-var temp = 'form#feedback-textarea.b-content__textarea.m-collapsed[name=feedback-textarea]:olololo <div/> dft > textarea#zzz.b-content__textarea.m-collapsed[name=zzz2][placeholder=Type something]';
+var temp = 'form#feedback-textarea.b-content__textarea.m-collapsed[name=feedback-textarea][checked]:olololo <div/> dft > textarea#zzz.b-content__textarea.m-collapsed[name=zzz2][placeholder=Type something]';
 
 //var TEMP = 'form#feedback-textarea.b-content__textarea.m-collapsed[name=feedback-textarea][type=ololol][data-count=5]:sdfggjty j g';
 
 var expression = temp;
+
+
 
 
 console.log(
@@ -180,6 +188,9 @@ console.log(
 	temp, '\n\n',
 	handleExpression(temp)
 );
+
+
+document.querySelectorAll('.rendered')[0].innerHTML = handleDOMTree(DOM2);
 
 
 </script>

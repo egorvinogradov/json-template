@@ -12,7 +12,7 @@ function parseFirstNode(expression){
 };
 
 function parseTagName(expression){
-    var tagName = /^[a-z]+/i.exec(expression);
+    var tagName = /^[a-z0-9]+/i.exec(expression);
     if ( tagName ) {
         return tagName[0];
     }
@@ -36,7 +36,7 @@ function parseClassNames(expression){
 
 function parseAttributes(expression){
     var attributes = expression
-        .replace(/\:.*$/, '')
+        .replace(/\:[^\]]+$/, '')
         .match(/\[[a-z_\-0-9]+\s*=\s*?[^\]]*\]/ig);
     if ( attributes ) {
         return attributes.map(function(attribute){
@@ -50,73 +50,49 @@ function parseAttributes(expression){
 };
 
 function parseInnerText(expression){
-    var text = /\:.*$/i.exec(expression);
+    var text = /\:[^\]]+$/.exec(expression);
     if ( text ) {
         return text[0].substr(1);
     }
 };
 
-function handleExpression(expression){
-    var firstNode = parseFirstNode(expression);
-    var trimmed = trimExpression(firstNode);
-    var childNodeExpression = expression.substr(firstNode.length).replace(/^\s*>\s*/, '');
-    var childNodeHtml;
-    if ( !/^\s*$/.test(childNodeExpression) ) {
-        childNodeHtml = handleExpression(childNodeExpression);
-    }
-    return getElementHtml({
-        id: parseId(trimmed),
-        tagName: parseTagName(trimmed),
-        classNames: parseClassNames(trimmed),
-        attributes: parseAttributes(firstNode),
-        innerText: parseInnerText(firstNode),
-        children: childNodeHtml
-    });
-};
-
 function getElementHtml(data){
 
-    var html = [];
+    var output = [];
     
     if ( data.tagName ) {
 
-        html.push('<' + data.tagName);
+        output.push('<' + data.tagName);
 
         if ( data.id ) {
-            html.push(' id="' + data.id + '"');
+            output.push(' id="' + data.id + '"');
         }
         if ( data.classNames && data.classNames.length ) {
-            html.push(' class="' + data.classNames.join(' ') + '"');
+            output.push(' class="' + data.classNames.join(' ') + '"');
         }
         if ( data.attributes && data.attributes.length ) {
             data.attributes.forEach(function(attribute){
-                html.push(' ' + attribute.name);
+                output.push(' ' + attribute.name);
                 if ( attribute.value ) {
-                    html.push('="' + attribute.value + '"');
+                    output.push('="' + attribute.value + '"');
                 }
             });
         }
         
-        html.push('>');
+        output.push('>');
 
         if ( !isEmptyTag(data.tagName) ) {
             if ( data.innerText ) {
-                html.push(escapeText(data.innerText));
+                output.push(escapeText(data.innerText));
             }
-            html.push(( data.children || '' ) + '</' + data.tagName + '>');
+            output.push(( data.children || '' ) + '</' + data.tagName + '>');
         }
     }
     else if ( data.innerText ) {
-        html.push(escapeText(data.innerText));
+        output.push(escapeText(data.innerText));
     }
-    
-    return html.join('');
-};
 
-function trimExpression(expression){
-    return expression
-        .replace(/\:.*$/, '')
-        .replace(/\[.*\]/, '');
+    return output.join('');
 };
 
 function escapeText(text){
@@ -131,3 +107,43 @@ function isEmptyTag(tagName){
     return emptyTags.indexOf(tagName) > -1;
 };
 
+function handleExpression(expression, childNodeHtml){
+    var firstNode = parseFirstNode(expression);
+    var trimmed = firstNode
+	    	.replace(/\:[^\]]+$/, '')
+	    	.replace(/\[.*\]/, '');
+
+    if ( !childNodeHtml ) {
+	    var childNodeExpression = expression
+	    		.substr(firstNode.length)
+	    		.replace(/^\s*>\s*/, '');
+
+	    if ( !/^\s*$/.test(childNodeExpression) ) {
+	        childNodeHtml = handleExpression(childNodeExpression);
+	    }
+    }
+
+    return getElementHtml({
+        id: parseId(trimmed),
+        tagName: parseTagName(trimmed),
+        classNames: parseClassNames(trimmed),
+        attributes: parseAttributes(firstNode),
+        innerText: parseInnerText(firstNode),
+        children: childNodeHtml
+    });
+};
+
+function handleDOMTree(tree){
+	if ( tree instanceof Array ) {
+		return tree.map(handleDOMTree).join('');
+	}
+	else if ( typeof tree === 'string' ) {
+		return handleExpression(tree);
+	}
+	else if ( tree.el ) {
+		return handleExpression(
+			tree.el,
+			tree.children ? handleDOMTree(tree.children) : null
+		);
+	}
+};
