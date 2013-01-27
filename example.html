@@ -6,47 +6,47 @@
 </head>
 <body>
 
-	<div id="original">
+    <div id="original">
 
-		<header class="b-header">
-		    <div class="b-logo">
-		        <a href="/" class="b-logo__link">Example.com</a>
-		    </div>
-		    <nav class="b-nav">
-		        <ul class="b-nav__list">
-		            <li class="b-nav__item">
-		                <a href="/about" class="b-nav__link">About</a>
-		            </li>
-		            <li class="b-nav__item">
-		                <a href="/products" class="b-nav__link">Products</a>
-		            </li>
-		            <li class="b-nav__item">
-		                <a href="/contact" class="b-nav__link b-nav__item_selected">Contact</a>
-		            </li>
-		        </ul>
-		    </nav>
-		</header>
+        <header class="b-header">
+            <div class="b-logo">
+                <a href="/" class="b-logo__link">Example.com</a>
+            </div>
+            <nav class="b-nav">
+                <ul class="b-nav__list">
+                    <li class="b-nav__item">
+                        <a href="/about" class="b-nav__link">About</a>
+                    </li>
+                    <li class="b-nav__item">
+                        <a href="/products" class="b-nav__link">Products</a>
+                    </li>
+                    <li class="b-nav__item">
+                        <a href="/contact" class="b-nav__link b-nav__item_selected">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
 
-		<div class="b-content">
-		    <h1 class="b-content__h1">Contact us</h1>
-		    <form id="feedback" action="/contact" method="POST">
-		        <textarea id="feedback-textarea" name="feedback-textarea" class="b-content__textarea"></textarea>
-		        <button id="feedback-submit" class="b-content__button" type="submit">Submit</button>
-		    </form>
-		</div>
+        <div class="b-content">
+            <h1 class="b-content__h1">Contact us</h1>
+            <form id="feedback" action="/contact" method="POST">
+                <textarea id="feedback-textarea" name="feedback-textarea" class="b-content__textarea"></textarea>
+                <button id="feedback-submit" class="b-content__button" type="submit">Submit</button>
+            </form>
+        </div>
 
-		<footer class="b-footer">
-		    &copy; Example.com, 2013<br>
-		    <a href="mailto:support@example.com" class="b-footer__email">support@example.com</a>
-		</footer>
+        <footer class="b-footer">
+            &copy; Example.com, 2013<br>
+            <a href="mailto:support@example.com" class="b-footer__email">support@example.com</a>
+        </footer>
 
-	</div>
+    </div>
 
-	<hr>
+    <hr>
 
-	<div class="rendered">
-		null
-	</div>
+    <div class="rendered">
+        null
+    </div>
 
 <script>
 
@@ -120,55 +120,55 @@ var DOM1 = [{
 
 
 var DOM2 = [{
-		el: 'header.b-header',
-		children: [
-			'div.b-logo > a.b-logo__link[href=/]:Example.com',
-			{
-				el: 'nav.b-nav',
-				children: {
-					el: 'ul.b-nav__list',
-					children: [
-						'li.b-nav__item > a.b-nav__link[href=/about]:About',
-						'li.b-nav__item > a.b-nav__link[href=/products]:Products',
-						'li.b-nav__item.b-nav__item_selected > a.b-nav__link[href=/contact]:Contact'
-					]
-				}
-			}
-		],
-	}, {
-		el: 'div.b-content',
-		children: [
-			'h1.b-content__h1:Contact us',
-			{
-				el: 'form#feedback[action=/contact][method=POST]',
-				children: [
-					'textarea#feedback-textarea.b-content__textarea[name=feedback-textarea]',
-					'button#feedback-submit.b-content__button[type=submit]:Submit'
-				]
-			}
-		]
-	}, {
-		el: 'footer.b-footer',
-		children: [
-			':&copy; Example.com, 2013', 'br', 'a.b-footer__email[href=mailto:support@example.com]:support@example.com'
-		]
-	}
+        el: 'header.b-header',
+        children: [
+            'div.b-logo > a.b-logo__link[href=/]:Example.com',
+            {
+                el: 'nav.b-nav',
+                children: {
+                    el: 'ul.b-nav__list',
+                    children: [
+                        'li.b-nav__item > a.b-nav__link[href=/about]:About',
+                        'li.b-nav__item > a.b-nav__link[href=/products]:Products',
+                        'li.b-nav__item.b-nav__item_selected > a.b-nav__link[href=/contact]:Contact'
+                    ]
+                }
+            }
+        ],
+    }, {
+        el: 'div.b-content',
+        children: [
+            'h1.b-content__h1:Contact us',
+            {
+                el: 'form#feedback[action=/contact][method=POST]',
+                children: [
+                    'textarea#feedback-textarea.b-content__textarea[name=feedback-textarea]',
+                    'button#feedback-submit.b-content__button[type=submit]:Submit'
+                ]
+            }
+        ]
+    }, {
+        el: 'footer.b-footer',
+        children: [
+            ':&copy; Example.com, 2013', 'br', 'a.b-footer__email[href=mailto:support@example.com]:support@example.com'
+        ]
+    }
 ];
 
 
 
 
 var CSS = {
-	'.b-header': {
-		display: 'block',
-		height: 220,
-		position: 'relative',
-		'z-index': 3,
-		'-moz-column-count': 2
-	},
-	'.b-footer': {
-		position: 'relative'
-	}
+    '.b-header': {
+        display: 'block',
+        height: 220,
+        position: 'relative',
+        'z-index': 3,
+        '-moz-column-count': 2
+    },
+    '.b-footer': {
+        position: 'relative'
+    }
 };
 
 
@@ -189,9 +189,9 @@ var expression = temp;
 
 
 console.log(
-	'>> \n\n',
-	temp, '\n\n',
-	JSONTemplate(CSS).toCSS()
+    '>> \n\n',
+    temp, '\n\n',
+    JSONTemplate(CSS).toCSS()
 );
 
 
