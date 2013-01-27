@@ -1,0 +1,188 @@
+<!doctype html>
+<html>
+<head>
+<title>Template test</title>
+<script src="json-template.js"></script>
+</head>
+<body>
+
+	<div id="original">
+
+		<header class="b-header">
+		    <div class="b-logo">
+		        <a href="/" class="b-logo__link">Example.com</a>
+		    </div>
+		    <nav class="b-nav">
+		        <ul class="b-nav__list">
+		            <li class="b-nav__item">
+		                <a href="/about" class="b-nav__link">About</a>
+		            </li>
+		            <li class="b-nav__item">
+		                <a href="/products" class="b-nav__link">Products</a>
+		            </li>
+		            <li class="b-nav__item">
+		                <a href="/contact" class="b-nav__link b-nav__item_selected">Contact</a>
+		            </li>
+		        </ul>
+		    </nav>
+		</header>
+
+		<div class="b-content">
+		    <h1 class="b-content__h1">Contact us</h1>
+		    <form id="feedback" action="/contact" method="POST">
+		        <textarea id="feedback-textarea" name="feedback-textarea" class="b-content__textarea"></textarea>
+		        <button id="feedback-submit" class="b-content__button" type="submit">Submit</button>
+		    </form>
+		</div>
+
+		<footer class="b-footer">
+		    &copy; Example.com, 2013<br>
+		    <a href="mailto:support@example.com" class="b-footer__email">support@example.com</a>
+		</footer>
+
+	</div>
+
+	<hr>
+
+	<div class="rendered">
+		null
+	</div>
+
+<script>
+
+
+/********************/
+/* bad */
+
+var DOM1 = [{
+        el: 'header.b-header',
+        children: [{
+                el: 'div.b-logo',
+                children: {
+                    el: 'a.b-logo__link',
+                    href: '/',
+                    children: 'Example.com'
+                }
+            }, {
+                el: 'nav.b-nav',
+                children: {
+                    el: 'ul.b-nav__list',
+                    children: [{
+                            el: 'li.b-nav__item',
+                            children: { el: 'a.b-nav__link', href: '/about', children: 'About' },
+                        }, {
+                            el: 'li.b-nav__item',
+                            children: { el: 'a.b-nav__link', href: '/products', children: 'Products' },
+                        }, {
+                            el: 'li.b-nav__item.b-nav__item_selected',
+                            children: { el: 'a.b-nav__link', href: '/contact', children: 'Contact' },
+                        }
+                    ]
+                }
+            }
+        ]
+    }, {
+        el: 'div.b-content',
+        children: [{
+                el: 'h1.b-content__h1',
+                children: 'Contact us'
+            }, {
+                el: 'form#feedback',
+                id: 'feedback',
+                class: '.b-form',
+                action: '/contact',
+                method: 'POST',
+                children: [{
+                        el: 'textarea#feedback-textarea.b-content__textarea',
+                        name: 'feedback-textarea'
+                    }, {
+                        el: 'button#feedback-submit.b-content__button',
+                        type: 'submit',
+                        children: 'Submit'
+                    }
+                ]
+            }
+        ]
+    }, {
+        el: 'footer.b-footer',
+        children: [
+            '&copy; Example.com, 2013',
+            { el: 'br' },
+            { el: 'a.b-footer__email', href: 'mailto:support@example.com', children: 'support@example.com' }
+        ]
+    }
+];
+
+
+/*****************/
+/* good */
+
+
+
+var DOM2 = [{
+		el: 'header.b-header',
+		children: [
+			'div.b-logo > a.b-logo__link[href=/]:Example.com',
+			{
+				el: 'nav.b-nav',
+				children: [
+					'li.b-nav__item > a.b-nav__link[href=/about]:About',
+					'li.b-nav__item > a.b-nav__link[href=/products]:Products',
+					'li.b-nav__item.b-nav__item_selected > a.b-nav__link[href=/contact]:Contact'
+				]
+			}
+		],
+	}, {
+		el: 'div.b-content',
+		children: [
+			'h1.b-content__h1:Contact us',
+			{
+				el: 'form#feedback[action=/contact][method=POST]',
+				children: [
+					'textarea#feedback-textarea.b-content__textarea[name=feedback-textarea]',
+					'button#feedback-submit.b-content__button[type=submit]:Submit'
+				]
+			}
+		]
+	}, {
+		el: 'footer.b-footer',
+		children: [
+			':&copy; Example.com, 2013', 'br', 'a.b-footer__email[href=mailto:support@example.com]:support@example.com'
+		]
+	}
+];
+
+var CSS = {
+	'.b-header': {
+		display: 'block',
+		height: 220,
+		position: 'relative'
+	},
+	'.b-footer': {
+		position: 'relative'
+	}
+};
+
+
+/***************/
+/* lib */
+
+
+var temp = 'form#feedback-textarea.b-content__textarea.m-collapsed[name=feedback-textarea]:olololo <div/> dft > textarea#zzz.b-content__textarea.m-collapsed[name=zzz2][placeholder=Type something]';
+
+//var TEMP = 'form#feedback-textarea.b-content__textarea.m-collapsed[name=feedback-textarea][type=ololol][data-count=5]:sdfggjty j g';
+
+var expression = temp;
+
+
+console.log(
+	'>> \n\n',
+	temp, '\n\n',
+	handleExpression(temp)
+);
+
+
+</script>
+
+</body>
+</html>
