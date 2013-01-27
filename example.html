@@ -162,12 +162,18 @@ var CSS = {
 	'.b-header': {
 		display: 'block',
 		height: 220,
-		position: 'relative'
+		position: 'relative',
+		'z-index': 3,
+		'-moz-column-count': 2
 	},
 	'.b-footer': {
 		position: 'relative'
 	}
 };
+
+
+
+
 
 
 /***************/
@@ -182,15 +188,16 @@ var expression = temp;
 
 
 
-
 console.log(
 	'>> \n\n',
 	temp, '\n\n',
-	handleExpression(temp)
+	JSONTemplate(CSS).toCSS()
 );
 
 
-document.querySelectorAll('.rendered')[0].innerHTML = handleDOMTree(DOM2);
+
+
+document.querySelectorAll('.rendered')[0].innerHTML = JSONTemplate(DOM2).toHTML();
 
 
 </script>
