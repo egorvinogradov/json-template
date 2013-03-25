@@ -197,6 +197,54 @@ console.log(
 
 
 
+// <div class="popup">
+//     <form class="login-form" action="/feedback" method="POST">
+//         <div class="block">
+//             <label for="username">Имя пользователя</label>
+//             <input id="username" name="username"></input>
+//         </div>
+//         <div class="block">
+//             <label for="password">Пароль</label>
+//             <input type="password" id="password"></input>
+//         </div>
+//         <button type="submit">Отправить</button>
+//     </form>
+// </div>
+
+
+
+var DOM3 = ['div.popup',
+    ['form.login-form[action=/feedback][method=POST]',
+        [
+            'div.block',
+                ['label[for=username]:Имя пользователя', 'input#username[name=username]'],
+            'div.block',
+                ['label[for=username]:Пароль', 'input#password[type=password]'],
+            'button[type=submit]:Отправить'
+        ]
+    ]
+];
+
+
+var DOM4 = ['div.popup',
+    ['form.login-form[action=/feedback][method=POST]',
+        [
+            ['div.block',
+                ['label[for=username]:Имя пользователя', 'input#username[name=username]']
+            ],
+            ['div.block',
+                ['label[for=username]:Пароль', 'input#password[type=password]']
+            ],
+            'button[type=submit]:Отправить'
+        ]
+    ]
+];
+
+
+
+
+
+
 document.querySelectorAll('.rendered')[0].innerHTML = JSONTemplate(DOM2).toHTML();
 
 
